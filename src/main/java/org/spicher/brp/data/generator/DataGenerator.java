@@ -6,8 +6,10 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spicher.brp.data.entity.SamplePerson;
-import org.spicher.brp.data.service.SamplePersonRepository;
+import org.spicher.brp.data.entity.Features;
+import org.spicher.brp.data.entity.Projects;
+import org.spicher.brp.data.service.FeaturesRepository;
+import org.spicher.brp.data.service.ProjectsRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 
@@ -15,10 +17,10 @@ import org.springframework.context.annotation.Bean;
 public class DataGenerator {
 
     @Bean
-    public CommandLineRunner loadData(SamplePersonRepository samplePersonRepository) {
+    public CommandLineRunner loadData(ProjectsRepository projectsRepository, FeaturesRepository featuresRepository) {
         return args -> {
             Logger logger = LoggerFactory.getLogger(getClass());
-            if (samplePersonRepository.count() != 0L) {
+            if (projectsRepository.count() != 0L) {
                 logger.info("Using existing database");
                 return;
             }
@@ -26,17 +28,23 @@ public class DataGenerator {
 
             logger.info("Generating demo data");
 
-            logger.info("... generating 100 Sample Person entities...");
-            ExampleDataGenerator<SamplePerson> samplePersonRepositoryGenerator = new ExampleDataGenerator<>(
-                    SamplePerson.class, LocalDateTime.of(2022, 9, 15, 0, 0, 0));
-            samplePersonRepositoryGenerator.setData(SamplePerson::setFirstName, DataType.FIRST_NAME);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setLastName, DataType.LAST_NAME);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setEmail, DataType.EMAIL);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setPhone, DataType.PHONE_NUMBER);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setDateOfBirth, DataType.DATE_OF_BIRTH);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setOccupation, DataType.OCCUPATION);
-            samplePersonRepositoryGenerator.setData(SamplePerson::setImportant, DataType.BOOLEAN_10_90);
-            samplePersonRepository.saveAll(samplePersonRepositoryGenerator.create(100, seed));
+            logger.info("... generating 100 Projects entities...");
+            ExampleDataGenerator<Projects> projectsRepositoryGenerator = new ExampleDataGenerator<>(Projects.class,
+                    LocalDateTime.of(2022, 9, 15, 0, 0, 0));
+            projectsRepositoryGenerator.setData(Projects::setName, DataType.WORD);
+            projectsRepositoryGenerator.setData(Projects::setPriority, DataType.NUMBER_UP_TO_10);
+            projectsRepositoryGenerator.setData(Projects::setValue, DataType.NUMBER_UP_TO_10);
+            projectsRepositoryGenerator.setData(Projects::setLead, DataType.FULL_NAME);
+            projectsRepositoryGenerator.setData(Projects::setActiv, DataType.BOOLEAN_90_10);
+            projectsRepository.saveAll(projectsRepositoryGenerator.create(100, seed));
+
+            logger.info("... generating 100 Features entities...");
+            ExampleDataGenerator<Features> featuresRepositoryGenerator = new ExampleDataGenerator<>(Features.class,
+                    LocalDateTime.of(2022, 9, 15, 0, 0, 0));
+            featuresRepositoryGenerator.setData(Features::setName, DataType.WORD);
+            featuresRepositoryGenerator.setData(Features::setPriority, DataType.NUMBER_UP_TO_10);
+            featuresRepositoryGenerator.setData(Features::setValue, DataType.NUMBER_UP_TO_10);
+            featuresRepository.saveAll(featuresRepositoryGenerator.create(100, seed));
 
             logger.info("Generated demo data");
         };
