@@ -1,8 +1,6 @@
 package org.spicher.brp.views.about;
 
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -21,8 +19,11 @@ public class AboutView extends VerticalLayout {
         img.setWidth("200px");
         add(img);
 
-        add(new H2("This place intentionally left empty"));
-        add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
+        add(new H1("spicher.org"));
+        add(new H2("Wer sind wir"));
+        add(new Paragraph("Text coming soon"));
+        add(new H2("Was machen wir"));
+        add(new Paragraph("Text coming soon"));
 
         setSizeFull();
         setJustifyContentMode(JustifyContentMode.CENTER);
