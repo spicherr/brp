@@ -1,4 +1,4 @@
-package org.spicher.brp.views.about;
+package org.spicher.brp.views.custom;
 
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -6,6 +6,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import org.spicher.brp.views.MainLayout;
+
 
 @PageTitle("About")
 @Route(value = "about", layout = MainLayout.class)

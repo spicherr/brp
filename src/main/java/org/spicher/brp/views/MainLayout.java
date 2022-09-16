@@ -12,9 +12,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import org.spicher.brp.components.appnav.AppNav;
 import org.spicher.brp.components.appnav.AppNavItem;
-import org.spicher.brp.views.about.AboutView;
-import org.spicher.brp.views.feature.FeatureView;
-import org.spicher.brp.views.projekte.ProjekteView;
+import org.spicher.brp.views.custom.*;
+
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -55,9 +54,8 @@ public class MainLayout extends AppLayout {
         AppNav nav = new AppNav();
 
         nav.addItem(new AppNavItem("About", AboutView.class, "la la-file"));
-        nav.addItem(new AppNavItem("Projekte", ProjekteView.class, "la la-address-book"));
-        nav.addItem(new AppNavItem("Feature", FeatureView.class, "la la-columns"));
-
+        nav.addItem(new AppNavItem("Kunden", CustomerView.class, "la la-address-book"));
+        nav.addItem(new AppNavItem("Projekte", ProjectView.class, "la la-address-book"));
         return nav;
     }
 
