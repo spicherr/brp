@@ -54,7 +54,7 @@ public class MainLayout extends AppLayout {
         AppNav nav = new AppNav();
 
         nav.addItem(new AppNavItem("About", AboutView.class, "la la-file"));
-        nav.addItem(new AppNavItem("Kunden", CustomerView.class, "la la-address-book"));
+        nav.addItem(new AppNavItem("Features", FeatureView.class, "la la-address-book"));
         nav.addItem(new AppNavItem("Projekte", ProjectView.class, "la la-address-book"));
         return nav;
     }
