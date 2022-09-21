@@ -1,4 +1,4 @@
-package org.spicher.brp.views.custom;
+package org.spicher.brp.views.project;
 
 
 import com.vaadin.flow.component.dependency.Uses;
@@ -11,9 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-import org.spicher.brp.data.entity.Customer;
 import org.spicher.brp.data.entity.Project;
-import org.spicher.brp.data.service.CustomerService;
 import org.spicher.brp.views.MainLayout;
 
 
@@ -21,7 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @PageTitle("Projekte")
-@Route(value = "project/:projectID?/:action?(edit)", layout = MainLayout.class)
+//@Route(value = "project/:projectID?/:action?(edit)", layout = MainLayout.class)
+@Route(value = "projects", layout = MainLayout.class)
 @Uses(Icon.class)
 public class ProjectView extends VerticalLayout {
     public ProjectView() {

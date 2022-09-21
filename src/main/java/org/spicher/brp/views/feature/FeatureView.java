@@ -1,4 +1,4 @@
-package org.spicher.brp.views.custom;
+package org.spicher.brp.views.feature;
 
 
 import com.vaadin.flow.component.dependency.Uses;
@@ -15,7 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @PageTitle("Features")
-@Route(value = "feature/:featureID?/:action?(edit)", layout = MainLayout.class)
+//@Route(value = "feature/:featureID?/:action?(edit)", layout = MainLayout.class)
+@Route(value = "features", layout = MainLayout.class)
 @Uses(Icon.class)
 public class FeatureView extends VerticalLayout {
     public FeatureView() {

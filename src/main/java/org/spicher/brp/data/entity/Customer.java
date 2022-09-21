@@ -1,8 +1,12 @@
 package org.spicher.brp.data.entity;
 
-import java.util.UUID;
+import org.springframework.jdbc.core.RowMapper;
 
 public class Customer {
+
+    public Customer() {
+
+    }
 
     public Integer getId() {
         return id;
@@ -31,7 +35,7 @@ public class Customer {
     private Integer id;
     private String firstName, lastName;
 
-    public Customer(Integer id, String firstName, String lastName) {
+    public Customer(int id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
