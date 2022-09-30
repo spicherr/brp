@@ -12,7 +12,11 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 import org.spicher.brp.data.entity.Project;
+import org.spicher.brp.data.service.ProjectService;
 import org.spicher.brp.views.MainLayout;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 
 import java.util.Arrays;
@@ -22,8 +26,13 @@ import java.util.List;
 //@Route(value = "project/:projectID?/:action?(edit)", layout = MainLayout.class)
 @Route(value = "projects", layout = MainLayout.class)
 @Uses(Icon.class)
+@Component
 public class ProjectView extends VerticalLayout {
-    public ProjectView() {
+
+    @Autowired
+    private static JdbcTemplate jdbcTemplate;
+    public ProjectView(JdbcTemplate jdbcProject) {
+        this.jdbcTemplate = jdbcProject;
 
         Image img = new Image("images/empty-plant.png", "placeholder plant");
         img.setWidth("200px");
@@ -31,16 +40,20 @@ public class ProjectView extends VerticalLayout {
 
         add(new H1("spicher.org"));
 
+/*
         List<Project> projects = Arrays.asList(
+
                 new Project(1,"VKM","Anita Hitz","A","L", true),
                 new Project(1,"PA19","Anita Hitz","A","L", false)
                 );
+*/
+        List<Project> projects = ProjectService.findAll(jdbcProject);
 
         Grid<Project> grid = new Grid<>(Project.class, false);
 
         grid.setItems(projects);
         grid.addColumn(Project::getId).setHeader("ID");
-        grid.addColumn(Project::getProject).setHeader("Projekt");
+        grid.addColumn(Project::getName).setHeader("Projekt");
         grid.addColumn(Project::getLead).setHeader("Verantwortlicher PL");
         grid.addColumn(Project::getPriority).setHeader("Priorität");
         grid.addColumn(Project::getValue).setHeader("Business Value");
@@ -53,5 +66,6 @@ public class ProjectView extends VerticalLayout {
 
 
     }
+
 
 }

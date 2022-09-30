@@ -22,8 +22,8 @@ public class FeatureView extends VerticalLayout {
     public FeatureView() {
 
         List<Feature> features = Arrays.asList(
-                new Feature(1,"VKM","XY","A","L", 0,2,5,2,0),
-                new Feature(1,"PA19","XX","A","L", 0,2,5,2,0)
+                new Feature(1,1,"XY","A","L", 0,2,5,2,0),
+                new Feature(1,2,"XX","A","L", 0,2,5,2,0)
                 );
 
         Grid<Feature> grid = new Grid<>(Feature.class, false);

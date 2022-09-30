@@ -1,8 +1,8 @@
 package org.spicher.brp.data.entity;
 
 public class Feature {
-    public Integer id,at,ba,dev,tm,div;
-    public String project,feature,priority,value;
+    public Integer id,project,at,ba,dev,tm,div;
+    public String feature,priority,value;
 
     public Integer getId() {
         return id;
@@ -52,11 +52,11 @@ public class Feature {
         this.div = div;
     }
 
-    public String getProject() {
+    public Integer getProject() {
         return project;
     }
 
-    public void setProject(String project) {
+    public void setProject(int project) {
         this.project = project;
     }
 
@@ -84,7 +84,7 @@ public class Feature {
         this.value = value;
     }
 
-    public Feature(int id, String project, String feature, String priority, String value, int at, int ba, int dev, int tm, int div) {
+    public Feature(int id, int project, String feature, String priority, String value, int at, int ba, int dev, int tm, int div) {
         this.id = id;
         this.project = project;
         this.feature = feature;

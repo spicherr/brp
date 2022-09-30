@@ -14,7 +14,7 @@ import org.spicher.brp.components.appnav.AppNav;
 import org.spicher.brp.components.appnav.AppNavItem;
 import org.spicher.brp.views.about.AboutView;
 import org.spicher.brp.views.project.*;
-import org.spicher.brp.views.customer.CustomerView;
+import org.spicher.brp.views.persona.PersonaView;
 import org.spicher.brp.views.feature.FeatureView;
 
 
@@ -59,14 +59,13 @@ public class MainLayout extends AppLayout {
         nav.addItem(new AppNavItem("About", AboutView.class, "la la-file"));
         nav.addItem(new AppNavItem("Features", FeatureView.class, "la la-address-book"));
         nav.addItem(new AppNavItem("Projekte", ProjectView.class, "la la-address-book"));
-        nav.addItem(new AppNavItem("Kunden", CustomerView.class, "la la-address-book"));
+        nav.addItem(new AppNavItem("StadtMember", PersonaView.class, "la la-address-book"));
         return nav;
     }
 
     private Footer createFooter() {
-        Footer layout = new Footer();
 
-        return layout;
+        return new Footer();
     }
 
     @Override

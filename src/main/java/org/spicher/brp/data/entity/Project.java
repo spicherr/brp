@@ -9,12 +9,12 @@ public class Project {
         this.id = id;
     }
 
-    public String getProject() {
-        return project;
+    public String getName() {
+        return name;
     }
 
-    public void setProject(String project) {
-        this.project = project;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLead() {
@@ -44,7 +44,7 @@ public class Project {
 
 
     public Integer id;
-    public String project, lead, priority,value;
+    public String name, lead, priority,value;
 
     public boolean isActive() {
         return active;
@@ -56,9 +56,9 @@ public class Project {
 
     public boolean active;
 
-    public Project(int id, String project, String lead, String priority, String value, boolean active) {
+    public Project(int id, String name, String lead, String priority, String value, Boolean active) {
         this.id = id;
-        this.project = project;
+        this.name = name;
         this.lead = lead;
         this.priority = priority;
         this.value = value;
