@@ -9,21 +9,43 @@ import java.util.List;
 @Component
 public class PersonaService {
 
-    public static List<Persona> findAll(JdbcTemplate jdbcCustomer) {
+    public static List<Persona> findAll(JdbcTemplate jdbc) {
 
-        String sql = "select p.id, p.first_name, p.last_name, prt.role_id, prt.team_id from persona p left join persona_role_team prt on" +
+        String sql = "select p.id, p.firstname, p.lastname, prt.role_id, prt.team_id from persona p left join persona_role_team prt on" +
                 " p.id = prt.persona_id;";
-        return jdbcCustomer.query(
+        return jdbc.query(
                 sql,
                 (rs, rowNum) ->
                         new Persona(
                                 rs.getInt("id"),
-                                rs.getString("first_name"),
-                                rs.getString("last_name"),
+                                rs.getString("firstname"),
+                                rs.getString("lastname"),
                                 rs.getInt("role_id"),
                                 rs.getInt("team_id")
                         )
         );
+    }
+
+    public static void createNewPerson(String firstName, String lastName,  JdbcTemplate jdbc) {
+
+        jdbc.update(
+                "INSERT INTO persona (firstname, lastname) VALUES (?, ?);",
+                firstName, lastName
+        );
+    }
+    public static void createPersonRoleTeam(Integer personId, Integer roleId, Integer teamId, JdbcTemplate jdbc){
+        jdbc.update(
+                "INSERT INTO persona_role_team (personId, roleId, teamId,) VALUES (?, ?,?);",
+                personId, roleId, teamId
+        );
+
+    }
+
+    public static void removePerson(Persona person, JdbcTemplate jdbc) {
+    }
+
+    public static void editPerson(Persona person, JdbcTemplate jdbc) {
+
     }
 
 

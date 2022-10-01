@@ -2,7 +2,7 @@ package org.spicher.brp.data.entity;
 
 public class Role {
     Integer id;
-    String name;
+    static String name;
 
 
     public Integer getId() {
@@ -13,7 +13,7 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
+    public static String getName() {
         return name;
     }
 
@@ -24,4 +24,6 @@ public class Role {
         this.id = id;
         this.name = name;
     }
+
+
 }
