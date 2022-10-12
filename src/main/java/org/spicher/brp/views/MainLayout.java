@@ -16,6 +16,7 @@ import org.spicher.brp.views.about.AboutView;
 import org.spicher.brp.views.project.*;
 import org.spicher.brp.views.persona.PersonaView;
 import org.spicher.brp.views.feature.FeatureView;
+import org.spicher.brp.views.role.RoleView;
 
 
 /**
@@ -59,6 +60,7 @@ public class MainLayout extends AppLayout {
         nav.addItem(new AppNavItem("About", AboutView.class, "la la-file"));
         nav.addItem(new AppNavItem("Features", FeatureView.class, "la la-address-book"));
         nav.addItem(new AppNavItem("Projekte", ProjectView.class, "la la-address-book"));
+        nav.addItem(new AppNavItem("Rollen", RoleView.class, "la la-address-book"));
         nav.addItem(new AppNavItem("StadtMember", PersonaView.class, "la la-address-book"));
         return nav;
     }

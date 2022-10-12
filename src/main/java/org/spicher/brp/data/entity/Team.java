@@ -1,6 +1,6 @@
 package org.spicher.brp.data.entity;
 
-public class Role {
+public class Team {
     int id;
     String name;
 
@@ -15,7 +15,7 @@ public class Role {
 
 
 
-    public Role(int id, String name){
+    public Team(int id, String name){
         this.id = id;
         this.name = name;
 

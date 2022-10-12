@@ -1,5 +1,6 @@
 package org.spicher.brp.data.service;
 
+import com.vaadin.flow.component.notification.Notification;
 import org.spicher.brp.data.entity.Persona;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -28,10 +29,9 @@ public class PersonaService {
 
     public static void createNewPerson(String firstName, String lastName,  JdbcTemplate jdbc) {
 
-        jdbc.update(
-                "INSERT INTO persona (firstname, lastname) VALUES (?, ?);",
-                firstName, lastName
-        );
+            jdbc.update("INSERT INTO persona (firstname, lastname) VALUES (?, ?);",firstName, lastName);
+
+
     }
     public static void createPersonRoleTeam(Integer personId, Integer roleId, Integer teamId, JdbcTemplate jdbc){
         jdbc.update(
@@ -48,6 +48,14 @@ public class PersonaService {
 
     }
 
+    public static boolean personAlreadyExists(String firstName, String lastName, JdbcTemplate jdbc){
+        String sql = "select count(*) from persona where firstname = ? and lastname = ?;";
+        Integer count = jdbc.queryForObject(sql, Integer.class, new Object[]{firstName, lastName} );
+        if(count==0){
+            return false;
+        }
+        return true;
+    }
 
 
 /*

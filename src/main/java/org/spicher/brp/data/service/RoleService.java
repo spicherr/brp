@@ -6,15 +6,22 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 
 public class RoleService {
+    public static List<Role> getAll(JdbcTemplate jdbc) {
 
-    public static List<String> getAll(JdbcTemplate jdbc) {
-
-        String sql = "select name from role;";
+        String sql = "select id, name from role;";
         return jdbc.query(
                 sql,
-                (rs, rowNum) ->
-                        Role.getName()
-                        );
+                (rs, rowNum) -> new Role(
+                        rs.getInt("id"),
+                        rs.getString("name")
+                )
+        );
+    }
 
+    public static void addRole(String roleName, JdbcTemplate jdbc) {
+        jdbc.update(
+                "INSERT INTO role (name) VALUES ( ?);",
+                roleName
+        );
     }
 }

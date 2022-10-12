@@ -1,6 +1,7 @@
 package org.spicher.brp.views.persona;
 
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -8,18 +9,25 @@ import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.spicher.brp.data.entity.Persona;
+import org.spicher.brp.data.entity.Role;
+import org.spicher.brp.data.entity.Team;
+import org.spicher.brp.data.service.PersonaRoleTeamService;
 import org.spicher.brp.data.service.PersonaService;
 import org.spicher.brp.data.service.RoleService;
+import org.spicher.brp.data.service.TeamService;
 import org.spicher.brp.views.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,6 +38,7 @@ import java.util.List;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
 import static org.spicher.brp.data.service.PersonaService.editPerson;
+import static org.spicher.brp.data.service.PersonaService.personAlreadyExists;
 
 @PageTitle("Persona")
 @Route(value = "persona", layout = MainLayout.class)
@@ -45,39 +54,24 @@ public class PersonaView extends VerticalLayout {
         img.setWidth("200px");
         add(img);
         add(new H1("spicher.org"));
-        TextField lastname = new TextField();
-        lastname.setLabel("Nachname");
-        lastname.setRequiredIndicatorVisible(true);
-        TextField firstname = new TextField();
-        firstname.setLabel("Vorname");
-        firstname.setRequiredIndicatorVisible(true);
+        TextField lastname = getTextField("Nachname");
+        TextField firstname = getTextField("Vorname");
 
 
-        ComboBox<String> comboBox = new ComboBox<>("Browser");
-        comboBox.setAllowCustomValue(true);
-        comboBox.setItems("Chrome", "Edge", "Firefox", "Safari");
-        comboBox.setHelperText("Select or type a browser");
-        ComboBox<String> comboBoxRole = new ComboBox<>("Rolle");
-        comboBoxRole.setAllowCustomValue(false);
-        comboBoxRole.setItems(RoleService.getAll(jdbc));
-        comboBoxRole.setHelperText("Select the Role");
+        RadioButtonGroup<Role> radioRole = getRoleRadioButtonGroup(jdbc);
+        RadioButtonGroup<Team> radioTeam = getTeamRadioButtonGroup(jdbc);
 
-
-
-        FormLayout newPerson = new FormLayout();
-        newPerson.add(lastname);
-        newPerson.add(firstname);
-        //newPerson.add(comboBox);
-        //newPerson.add(comboBoxRole);
+        FormLayout newPerson = getFormForPerson(lastname, firstname, radioRole, radioTeam);
 
         add(newPerson);
 
         Button button = new Button("Click it");
 
         button.addClickListener(clickEvent ->
-                addNewPerson(lastname.getValue(), firstname.getValue(), jdbc)
+                addNewPerson(lastname.getValue(), firstname.getValue(), radioRole.getValue(), radioTeam.getValue(), jdbc)
         );
         add(button);
+
         List<Persona> personas = PersonaService.findAll(jdbc);
 
         Grid<Persona> grid = new Grid<>(Persona.class, false);
@@ -96,27 +90,70 @@ public class PersonaView extends VerticalLayout {
                     bRemove.setIcon(new Icon(EDIT));
                 })
         );
-        /*
-        grid.addColumn(
-                new ComponentRenderer<>(Button::new, (bRemove, person) -> {
-                    bRemove.addThemeVariants(ButtonVariant.LUMO_ICON,
-                            ButtonVariant.LUMO_ERROR,
-                            ButtonVariant.LUMO_TERTIARY);
-                    bRemove.addClickListener(e -> PersonaService.remove(person));
-                    bRemove.setIcon(new Icon(TRASH));
-                })
-        );
-        */
         grid.setItems(personas);
         add(grid);
 
     }
 
+    private static FormLayout getFormForPerson(TextField lastname, TextField firstname, RadioButtonGroup<Role> radioRole, RadioButtonGroup<Team> radioTeam) {
+        FormLayout newPerson = new FormLayout();
+        newPerson.add(lastname);
+        newPerson.add(firstname);
+        newPerson.add(radioRole);
+        newPerson.add(radioTeam);
+        return newPerson;
+    }
+
+    private static TextField getTextField(String label) {
+        TextField lastname = new TextField();
+        lastname.setLabel(label);
+        lastname.setRequiredIndicatorVisible(true);
+        return lastname;
+    }
+
+    private static RadioButtonGroup<Team> getTeamRadioButtonGroup(JdbcTemplate jdbc) {
+        RadioButtonGroup<Team> radioTeam = new RadioButtonGroup<>("Teamzuteilung");
+        radioTeam.setHelperText("Select the Team");
+        List<Team> teamList = TeamService.getAll(jdbc);
+        radioTeam.setItems(teamList);
+        radioTeam.setValue(teamList.get(0));
+        radioTeam.setRenderer(
+                new ComponentRenderer<>(team -> {
+                    Text textTeam = new Text(String.valueOf(team.getId()) + " " + team.getName());
+                    return new Div(textTeam);
+                }
+                )
+        );
+        return radioTeam;
+    }
+
+    private static RadioButtonGroup<Role> getRoleRadioButtonGroup(JdbcTemplate jdbc) {
+        RadioButtonGroup<Role> radioRole = new RadioButtonGroup<>("Rollenzuteilung");
+        radioRole.setHelperText("Select the Role");
+        List<Role> roleList = RoleService.getAll(jdbc);
+        radioRole.setItems(roleList);
+        radioRole.setValue(roleList.get(0));
+        radioRole.setRenderer(
+                new ComponentRenderer<>(role -> {
+                    Text textRole = new Text(String.valueOf(role.getId()) + " " + role.getName());
+                return new Div(textRole);
+                }
+            )
+        );
+        return radioRole;
+    }
 
 
-    private void addNewPerson(String lastName, String firstName, JdbcTemplate jdbc){
-        PersonaService.createNewPerson(firstName,lastName, this.jdbc);
-        Notification.show("Button Clicked!" + lastName +" "+firstName);
+    private void addNewPerson(String lastName, String firstName, Role role, Team team, JdbcTemplate jdbc){
+        if(!personAlreadyExists(firstName, lastName, jdbc)) {
+            PersonaService.createNewPerson(firstName, lastName, this.jdbc);
+            Notification.show(lastName + " " + firstName + " created");
+        }else{
+            Notification.show(lastName + " " + firstName + " already exists");
+        }
+
+        PersonaRoleTeamService.addRelation(lastName, firstName, role.getId(), team.getId(), jdbc);
+        Notification.show("added Persona to Team "+ team.getId() +" with Role " + role.getId() );
 
     }
     public void remove(Persona person, JdbcTemplate jdbc) {
