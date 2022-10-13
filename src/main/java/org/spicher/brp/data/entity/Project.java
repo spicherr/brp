@@ -1,6 +1,8 @@
 package org.spicher.brp.data.entity;
 
 public class Project {
+    public Integer id;
+    public String name, lead, priority,businessValue;
     public Integer getId() {
         return id;
     }
@@ -33,36 +35,21 @@ public class Project {
         this.priority = priority;
     }
 
-    public String getValue() {
-        return value;
+    public String getBusinessValue() {
+        return businessValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setBusinessValue(String businessValue) {
+        this.businessValue = businessValue;
     }
 
-
-
-    public Integer id;
-    public String name, lead, priority,value;
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public boolean active;
-
-    public Project(int id, String name, String lead, String priority, String value, Boolean active) {
+    public Project(int id, String name, String lead, String priority, String businessValue) {
         this.id = id;
         this.name = name;
         this.lead = lead;
         this.priority = priority;
-        this.value = value;
-        this.active = active;
+        this.businessValue = businessValue;
+
     }
 
 }

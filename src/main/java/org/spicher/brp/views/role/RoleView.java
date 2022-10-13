@@ -3,6 +3,7 @@ package org.spicher.brp.views.role;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
@@ -49,26 +50,20 @@ public class RoleView extends VerticalLayout {
         );
         add(roleName);
         add(bAdd);
-        Grid<Role> grid = getRoleGrid(jdbc);
-        add(grid);
+        getGrid(jdbc);
 
     }
 
-    private void addRole(String roleName, JdbcTemplate jdbc) {
-        RoleService.addRole(roleName, this.jdbc);
-        Notification.show(roleName  + " wurde erstellt");
-    }
-
-    private static Grid<Role> getRoleGrid(JdbcTemplate jdbc) {
+    private void getGrid(JdbcTemplate jdbc) {
         List<Role> role = RoleService.getAllActive(jdbc);
 
         Grid<Role> grid = new Grid<>(Role.class, false);
+
 // Create a grid bound to the list
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-
-
         grid.addColumn(Role::getId).setHeader("ID");
-        grid.addColumn(Role::getName).setHeader("Name");
+        grid.addColumn(Role::getName).setHeader("Name")
+        ;
         grid.addColumn(
                 new ComponentRenderer<>(Button::new, (bRemove, specRole) -> {
                     bRemove.addClickListener(e -> inactivateRole(specRole, jdbc));
@@ -77,9 +72,13 @@ public class RoleView extends VerticalLayout {
         );
         grid.setItems(role);
         grid.getDataProvider().refreshAll();
-        return grid;
+        add(grid);
     }
 
+    private void addRole(String roleName, JdbcTemplate jdbc) {
+        RoleService.addRole(roleName, this.jdbc);
+        Notification.show(roleName  + " wurde erstellt");
+    }
     private static void inactivateRole(Role role, JdbcTemplate jdbc) {
         RoleService.inactivateRole(role.getId(), jdbc);
         Notification.show(role.getName()  + " wurde inaktviert");

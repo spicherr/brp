@@ -3,8 +3,6 @@ package org.spicher.brp.views.persona;
 
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -18,7 +16,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -36,10 +33,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
-import static com.vaadin.flow.component.icon.VaadinIcon.TRASH;
-import static org.spicher.brp.data.service.PersonaService.editPerson;
 import static org.spicher.brp.data.service.PersonaService.personAlreadyExists;
+import static org.spicher.brp.FormElements.getTextField;
 
 @PageTitle("Persona")
 @Route(value = "persona", layout = MainLayout.class)
@@ -72,12 +67,11 @@ public class PersonaView extends VerticalLayout {
         );
         add(button);
 
-        Grid<Persona> grid = getPersonaGrid(jdbc);
-        add(grid);
+        getGrid(jdbc);
 
     }
 
-    private static Grid<Persona> getPersonaGrid(JdbcTemplate jdbc) {
+    private void getGrid(JdbcTemplate jdbc) {
         List<Persona> personas = PersonaService.findAll(jdbc);
 
         Grid<Persona> grid = new Grid<>(Persona.class, false);
@@ -100,9 +94,8 @@ public class PersonaView extends VerticalLayout {
         */
         grid.setItems(personas);
         grid.getDataProvider().refreshAll();
-        return grid;
+        add(grid);
     }
-
     private static FormLayout getFormForPerson(TextField lastname, TextField firstname, RadioButtonGroup<Role> radioRole, RadioButtonGroup<Team> radioTeam) {
         FormLayout newPerson = new FormLayout();
         newPerson.add(lastname);
@@ -111,14 +104,6 @@ public class PersonaView extends VerticalLayout {
         newPerson.add(radioTeam);
         return newPerson;
     }
-
-    private static TextField getTextField(String label) {
-        TextField lastname = new TextField();
-        lastname.setLabel(label);
-        lastname.setRequiredIndicatorVisible(true);
-        return lastname;
-    }
-
     private static RadioButtonGroup<Team> getTeamRadioButtonGroup(JdbcTemplate jdbc) {
         RadioButtonGroup<Team> radioTeam = new RadioButtonGroup<>("Teamzuteilung");
         radioTeam.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
