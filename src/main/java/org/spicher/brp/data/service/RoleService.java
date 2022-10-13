@@ -6,9 +6,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;
 
 public class RoleService {
-    public static List<Role> getAll(JdbcTemplate jdbc) {
+    public static List<Role> getAllActive(JdbcTemplate jdbc) {
 
-        String sql = "select id, name from role;";
+        String sql = "select id, name from role where status = 1;";
         return jdbc.query(
                 sql,
                 (rs, rowNum) -> new Role(
@@ -22,6 +22,12 @@ public class RoleService {
         jdbc.update(
                 "INSERT INTO role (name) VALUES ( ?);",
                 roleName
+        );
+    }
+    public static void inactivateRole(int roleId, JdbcTemplate jdbc) {
+        jdbc.update(
+                "UPDATE role set status=0 where id = ?;",
+                roleId
         );
     }
 }

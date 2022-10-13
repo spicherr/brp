@@ -16,6 +16,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
+import com.vaadin.flow.component.radiobutton.RadioGroupVariant;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
@@ -66,12 +67,17 @@ public class PersonaView extends VerticalLayout {
         add(newPerson);
 
         Button button = new Button("Click it");
-
         button.addClickListener(clickEvent ->
                 addNewPerson(lastname.getValue(), firstname.getValue(), radioRole.getValue(), radioTeam.getValue(), jdbc)
         );
         add(button);
 
+        Grid<Persona> grid = getPersonaGrid(jdbc);
+        add(grid);
+
+    }
+
+    private static Grid<Persona> getPersonaGrid(JdbcTemplate jdbc) {
         List<Persona> personas = PersonaService.findAll(jdbc);
 
         Grid<Persona> grid = new Grid<>(Persona.class, false);
@@ -84,15 +90,17 @@ public class PersonaView extends VerticalLayout {
         grid.addColumn(Persona::getLastName).setHeader("Name");
         grid.addColumn(Persona::getRoleId).setHeader("Rolle");
         grid.addColumn(Persona::getTeamId).setHeader("Team");
+        /*
         grid.addColumn(
                 new ComponentRenderer<>(Button::new, (bRemove, person) -> {
                     bRemove.addClickListener(e -> editPerson(person, jdbc));
                     bRemove.setIcon(new Icon(EDIT));
                 })
         );
+        */
         grid.setItems(personas);
-        add(grid);
-
+        grid.getDataProvider().refreshAll();
+        return grid;
     }
 
     private static FormLayout getFormForPerson(TextField lastname, TextField firstname, RadioButtonGroup<Role> radioRole, RadioButtonGroup<Team> radioTeam) {
@@ -113,6 +121,7 @@ public class PersonaView extends VerticalLayout {
 
     private static RadioButtonGroup<Team> getTeamRadioButtonGroup(JdbcTemplate jdbc) {
         RadioButtonGroup<Team> radioTeam = new RadioButtonGroup<>("Teamzuteilung");
+        radioTeam.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
         radioTeam.setHelperText("Select the Team");
         List<Team> teamList = TeamService.getAll(jdbc);
         radioTeam.setItems(teamList);
@@ -129,8 +138,9 @@ public class PersonaView extends VerticalLayout {
 
     private static RadioButtonGroup<Role> getRoleRadioButtonGroup(JdbcTemplate jdbc) {
         RadioButtonGroup<Role> radioRole = new RadioButtonGroup<>("Rollenzuteilung");
+        radioRole.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
         radioRole.setHelperText("Select the Role");
-        List<Role> roleList = RoleService.getAll(jdbc);
+        List<Role> roleList = RoleService.getAllActive(jdbc);
         radioRole.setItems(roleList);
         radioRole.setValue(roleList.get(0));
         radioRole.setRenderer(
