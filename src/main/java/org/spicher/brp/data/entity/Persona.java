@@ -3,6 +3,7 @@ package org.spicher.brp.data.entity;
 public class Persona {
     private Integer id, roleId, teamId;
     private String firstName, lastName;
+
     public Integer getTeamId() {
         return teamId;
     }

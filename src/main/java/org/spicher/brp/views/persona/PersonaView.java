@@ -33,8 +33,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static org.spicher.brp.FormElements.*;
 import static org.spicher.brp.data.service.PersonaService.personAlreadyExists;
-import static org.spicher.brp.FormElements.getTextField;
 
 @PageTitle("Persona")
 @Route(value = "persona", layout = MainLayout.class)
@@ -104,39 +104,9 @@ public class PersonaView extends VerticalLayout {
         newPerson.add(radioTeam);
         return newPerson;
     }
-    private static RadioButtonGroup<Team> getTeamRadioButtonGroup(JdbcTemplate jdbc) {
-        RadioButtonGroup<Team> radioTeam = new RadioButtonGroup<>("Teamzuteilung");
-        radioTeam.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
-        radioTeam.setHelperText("Select the Team");
-        List<Team> teamList = TeamService.getAll(jdbc);
-        radioTeam.setItems(teamList);
-        radioTeam.setValue(teamList.get(0));
-        radioTeam.setRenderer(
-                new ComponentRenderer<>(team -> {
-                    Text textTeam = new Text(String.valueOf(team.getId()) + " " + team.getName());
-                    return new Div(textTeam);
-                }
-                )
-        );
-        return radioTeam;
-    }
 
-    private static RadioButtonGroup<Role> getRoleRadioButtonGroup(JdbcTemplate jdbc) {
-        RadioButtonGroup<Role> radioRole = new RadioButtonGroup<>("Rollenzuteilung");
-        radioRole.addThemeVariants(RadioGroupVariant.LUMO_VERTICAL);
-        radioRole.setHelperText("Select the Role");
-        List<Role> roleList = RoleService.getAllActive(jdbc);
-        radioRole.setItems(roleList);
-        radioRole.setValue(roleList.get(0));
-        radioRole.setRenderer(
-                new ComponentRenderer<>(role -> {
-                    Text textRole = new Text(String.valueOf(role.getId()) + " " + role.getName());
-                return new Div(textRole);
-                }
-            )
-        );
-        return radioRole;
-    }
+
+
 
 
     private void addNewPerson(String lastName, String firstName, Role role, Team team, JdbcTemplate jdbc){

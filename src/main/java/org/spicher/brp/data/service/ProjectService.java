@@ -27,7 +27,7 @@ public class ProjectService {
         );
     }
 
-    public static void createProject(int id, String name, String lead, String prio, String bVal, JdbcTemplate jdbc) {
+    public static void createProject(int id, String name, int lead, String prio, String bVal, JdbcTemplate jdbc) {
             jdbc.update("INSERT INTO project (id,name,lead,priority,business_value) VALUES (?,?,?,?, ?);", id, name, lead, prio, bVal);
     }
 

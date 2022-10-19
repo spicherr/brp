@@ -11,11 +11,13 @@ import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.spicher.brp.data.entity.Persona;
 import org.spicher.brp.data.entity.Project;
 import org.spicher.brp.data.service.ProjectService;
 import org.spicher.brp.views.MainLayout;
@@ -58,12 +60,15 @@ public class ProjectView extends VerticalLayout {
         FormLayout newProject = new FormLayout();
         IntegerField id = getIntegerField("Kontierungsobjekt");
         TextField name = getTextField("Projektbezeichnung");
-        TextField lead = getTextField("PL");
-        TextField prio = getTextField("Priorität");
-        TextField bVal = getTextField("Business Value");
+
+        RadioButtonGroup lead = getListOfPl(jdbc);
+        RadioButtonGroup prio = getRadioPrioField();
+        RadioButtonGroup bVal = getRadioBValField();
+
         Button bSave = new Button("speichern");
         bSave.addClickListener(clickEvent ->
-                addNewProject(id.getValue(), name.getValue(), lead.getValue(), prio.getValue(), bVal.getValue(), jdbc)
+                addNewProject(id.getValue(), name.getValue(), (Persona) lead.getValue(), String.valueOf(prio.getValue()),
+                        String.valueOf(bVal.getValue()),jdbc)
         );
 
         Button bReset = new Button("Reset", event -> {
@@ -86,14 +91,16 @@ public class ProjectView extends VerticalLayout {
 
     }
 
-    private void addNewProject(int id, String name, String pl, String prio, String bVal, JdbcTemplate jdbc) {
+    private void addNewProject(int id, String name, Persona pl, String prio, String bVal, JdbcTemplate jdbc) {
         if(!ProjectService.projectExists(id, jdbc)) {
-            ProjectService.createProject(id, name, pl, prio, bVal, jdbc);
+            ProjectService.createProject(id, name, pl.getId(), prio, bVal, jdbc);
+
             Notification.show("Projekt wurde angelegt");
         }
         else{
             Notification.show("Projekt existiert bereits");
         }
+        Notification.show(id+", "+ name+", "+ pl.getFirstName()+", "+ prio+", "+bVal);
     }
 
     private void getGrid(JdbcTemplate jdbc) {

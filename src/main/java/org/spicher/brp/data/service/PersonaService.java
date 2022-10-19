@@ -26,6 +26,21 @@ public class PersonaService {
                         )
         );
     }
+    public static List<Persona> getListOfPl(JdbcTemplate jdbc) {
+
+        String sql = "select p.id, p.firstname, p.lastname, prt.role_id, prt.team_id from persona p left join persona_role_team prt on p.id = prt.persona_id where prt.role_id = 5;";
+        return jdbc.query(
+                sql,
+                (rs, rowNum) ->
+                        new Persona(
+                                rs.getInt("id"),
+                                rs.getString("firstname"),
+                                rs.getString("lastname"),
+                                rs.getInt("role_id"),
+                                rs.getInt("team_id")
+                        )
+        );
+    }
 
     public static void createNewPerson(String firstName, String lastName,  JdbcTemplate jdbc) {
 
