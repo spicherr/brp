@@ -20,7 +20,7 @@ public class ProjectService {
                         new Project(
                                 rs.getInt("id"),
                                 rs.getString("name"),
-                                rs.getString("lead"),
+                                rs.getInt("lead"),
                                 rs.getString("priority"),
                                 rs.getString("business_value")
                         )

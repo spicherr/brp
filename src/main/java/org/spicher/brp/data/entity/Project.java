@@ -1,8 +1,8 @@
 package org.spicher.brp.data.entity;
 
 public class Project {
-    public Integer id;
-    public String name, lead, priority,businessValue;
+    public Integer id, lead;
+    public String name, priority,businessValue;
     public Integer getId() {
         return id;
     }
@@ -19,11 +19,11 @@ public class Project {
         this.name = name;
     }
 
-    public String getLead() {
+    public Integer getLead() {
         return lead;
     }
 
-    public void setLead(String lead) {
+    public void setLead(Integer lead) {
         this.lead = lead;
     }
 
@@ -43,7 +43,7 @@ public class Project {
         this.businessValue = businessValue;
     }
 
-    public Project(int id, String name, String lead, String priority, String businessValue) {
+    public Project(int id, String name, int lead, String priority, String businessValue) {
         this.id = id;
         this.name = name;
         this.lead = lead;
